@@ -2,6 +2,8 @@
 
 Create a local kubernetes cluster in Vagrant. Created and used for learning kubernetes, as support for CKAD, CKA, and CKS preparation.
 
+The `vagrant` user in the master node is configured to access the cluster. You can use `kubectl` to interact with the cluster, or `helm` to manage charts.
+
 ## Requirements
 
 - Ubuntu Desktop 24.04 (probably works on any Linux)
@@ -47,3 +49,10 @@ If you need multiple workers, edit the `Vagrantfile` file and add a new line in 
 
 > For now multiple masters cluster is not supported.
 
+The provisioning of the cluster is achieved using `ansible`. Feel free to update the roles in the `./roles/` folder to correspond to your needs.
+
+Check the `./vars/main.yaml` file and customize if you need different versions, or some extra packages installed.
+
+## Shared folder
+
+The local `shared-folder` is shared with all the cluster nodes, mounted in the `/mnt/shared-folder` path. You can use it to share files (e.g.) between your host and cluster nodes.

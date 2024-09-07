@@ -27,6 +27,7 @@ Vagrant.configure("2") do |config|
         config.vm.define conf[:hostname] do |node|
             node.vm.hostname = conf[:hostname]
             node.vm.network "private_network", ip: conf[:ip]
+            node.vm.synced_folder "./shared-folder", "/mnt/shared-folder", create: true
             node.vm.provision "ansible" do |ansible|
                 ansible.playbook = "main.yaml"
                 ansible.compatibility_mode = "2.0"
