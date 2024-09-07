@@ -1,0 +1,42 @@
+
+- name: add signing key for k8s
+  apt_key:
+    url: "https://pkgs.k8s.io/core:/stable:/{{ k8s.apt_repo_version }}/deb/Release.key"
+    state: present
+
+- name: adding k8s repository
+  apt_repository:
+    repo: "deb https://pkgs.k8s.io/core:/stable:/{{ k8s.apt_repo_version }}/deb/ /"
+    state: present
+    filename: kubernetes.list
+
+- name: install k8s binaries
+  apt: 
+    name: "{{ item }}"
+    state: present
+    force: True
+    update_cache: yes
+  with_items:
+    - "kubelet={{ k8s.packages_version }}"
+    - "kubeadm={{ k8s.packages_version }}"
+    - "kubectl={{ k8s.packages_version }}"
+
+- name: ensure kubelet is enabled
+  ansible.builtin.systemd:
+    name: kubelet.service
+    enabled: true
+    state: stopped    
+
+# install helm
+- name: unarchive helm
+  ansible.builtin.unarchive:
+    remote_src: true
+    src: "https://get.helm.sh/helm-v{{ helm_version }}-linux-amd64.tar.gz"
+    dest: "/tmp"
+
+- name: install helm
+  ansible.builtin.copy:
+    remote_src: true
+    src: /tmp/linux-amd64/helm
+    dest: /usr/bin/helm
+    mode: '0755'

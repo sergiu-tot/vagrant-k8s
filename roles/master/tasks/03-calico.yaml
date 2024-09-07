@@ -1,0 +1,31 @@
+---
+- name: install kubernetes-cni
+  ansible.builtin.package: 
+    name: kubernetes-cni
+    state: present
+
+- name: create tigera-operator namespace
+  kubernetes.core.k8s:
+    name: tigera-operator
+    api_version: v1
+    kind: Namespace 
+    state: present
+
+- name: add projectcalico helm repo
+  kubernetes.core.helm_repository:
+    name: projectcalico
+    repo_url: https://docs.tigera.io/calico/charts
+
+- name: install calico operator
+  kubernetes.core.helm:
+    update_repo_cache: true
+    chart_ref: projectcalico/tigera-operator
+    chart_version: "{{ k8s.calico_version }}"
+    timeout: "10m"
+    release_state: "present"
+    wait: true
+    release_name: "calico"
+    release_namespace: tigera-operator
+
+- name: wait for coredns pods to be ready
+  ansible.builtin.command: kubectl wait --namespace=kube-system --for=condition=Available=True deployment/coredns --timeout=300s

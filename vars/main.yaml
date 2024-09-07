@@ -1,0 +1,32 @@
+---
+helm_version: 3.15.4
+
+k8s:
+  packages_version: 1.31.0-1.1
+  apt_repo_version: "v1.31"
+  cluster_version: "v1.31.0"
+  clusterName: "cluster"
+  dnsDomain: "cluster.local"
+  podSubnet: 10.234.0.0/16
+  serviceSubnet: 10.233.0.0/16
+  calico_version: "v3.28.1"
+  cert_key: b0b06c83edf65be67aa46e7d57aa97ac4e97c36b24aa8187cd1bdbf1fe8e866b
+
+packages:
+- net-tools
+- tcpdump
+- vim
+- wget
+- tuned
+- python3-kubernetes
+
+kernel_modules:
+- br_netfilter
+- overlay
+
+tuned_profile: virtual-guest
+
+sysctl_params:
+  net.bridge.bridge-nf-call-iptables: 1
+  net.bridge.bridge-nf-call-ip6tables: 1
+  net.ipv4.ip_forward: 1

@@ -1,0 +1,18 @@
+---
+- name: create ~/.kube directory
+  ansible.builtin.file:
+    path: "{{ item }}/.kube"
+    state: directory
+  with_items:
+    - "/home/vagrant"
+    - "/root"
+
+- name: copy kubernetes config for root user 
+  ansible.builtin.copy:
+    src: /etc/kubernetes/admin.conf
+    dest: "{{ item }}"
+    mode: 0400
+    remote_src: true
+  with_items:
+    - "/root/.kube/config"
+    - "/home/vagrant/.kube/config"

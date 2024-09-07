@@ -1,0 +1,4 @@
+---
+- include_tasks: 01-os-setup.yaml
+- include_tasks: 02-docker.yaml
+- include_tasks: 03-kube-tools.yaml

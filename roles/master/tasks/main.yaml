@@ -1,0 +1,5 @@
+---
+- include_tasks: 01-k8s-init.yaml
+- include_tasks: 02-k8s-local-config.yaml
+- include_tasks: 03-calico.yaml
+- include_tasks: 04-join-command.yaml

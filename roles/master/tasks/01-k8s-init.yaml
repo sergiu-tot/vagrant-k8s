@@ -1,0 +1,16 @@
+---
+- name: upload kubeadm-config.yaml
+  ansible.builtin.template:
+    src: kubeadm-config.yaml.j2
+    dest: /root/kubeadm-config.yaml
+    mode: 0400
+
+- name: initialize kubernetes cluster
+  ansible.builtin.command: kubeadm init --config /root/kubeadm-config.yaml
+  args:
+    creates: /etc/kubernetes/admin.conf
+
+- name: upload cluster certificates
+  ansible.builtin.shell: kubeadm init phase upload-certs --upload-certs --config /root/kubeadm-config.yaml && touch /root/.k8s_certs_uploaded
+  args:
+    creates: /root/.k8s_certs_uploaded
