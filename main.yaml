@@ -1,0 +1,13 @@
+---
+- name: install and configure k8s cluster
+  hosts: all
+  become: yes
+  gather_facts: True
+
+  vars_files:
+    - vars/main.yaml
+
+  roles:
+    - general
+    - { role: master, when: role == "master"}
+    - { role: worker, when: role == "worker"}

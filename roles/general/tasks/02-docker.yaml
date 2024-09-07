@@ -1,0 +1,41 @@
+- name: add apt signing key for docker
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    state: present
+
+- name: add docker repository
+  apt_repository:
+    repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu jammy stable
+    state: present
+
+- name: install docker
+  apt: 
+    name: docker-ce
+    state: present
+    update_cache: yes
+
+- name: copy docker configuration
+  template:
+    src: templates/daemon.json.j2
+    dest: "/etc/docker/daemon.json"
+
+- name: restart docker
+  service:
+    name: docker
+    state: restarted
+
+- name: add vagrant user to docker group
+  user:
+    name: vagrant
+    groups: docker
+    append: yes
+
+- name: configure containerd
+  template:
+    src: templates/config.toml.j2
+    dest: "/etc/containerd/config.toml"
+
+- name: restart containerd
+  service:
+    name: containerd
+    state: restarted

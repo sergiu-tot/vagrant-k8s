@@ -1,0 +1,50 @@
+- name: load kernel modules
+  community.general.modprobe:
+    name:      "{{ item }}"
+    state:      present
+    persistent: present
+  with_items:  "{{ kernel_modules }}"
+
+- name: add sysctl params
+  ansible.posix.sysctl:
+    name: "{{ item.key }}"
+    value: "{{ item.value }}"
+    state: present
+    reload: true
+  with_dict: "{{ sysctl_params }}"
+
+- name: update system packages
+  apt:
+    upgrade: dist
+    update_cache: yes
+
+- name: install required packages
+  apt:
+    name: "{{ packages }}"
+    state: present
+    update_cache: yes
+
+- name: autoremove unneeded packages 
+  ansible.builtin.package:
+    autoremove: yes
+
+- name: remove swapfile
+  mount:
+    name: "{{ item }}"
+    fstype: swap
+    state: absent
+  with_items:
+    - swap
+    - none
+
+- name: disable swap
+  shell: swapoff -a
+
+- name: set profile
+  command: "tuned-adm profile {{ tuned_profile }}"
+
+- name: add hosts mapping
+  with_items: "{{ host_list }}"
+  ansible.builtin.lineinfile:
+    path: /etc/hosts
+    line: "{{ item }}"
