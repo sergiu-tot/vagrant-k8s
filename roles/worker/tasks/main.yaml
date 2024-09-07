@@ -1,0 +1,9 @@
+---
+- name: copy join command to node
+  ansible.builtin.copy: 
+    src: join
+    dest: /tmp/join
+    mode: 0755
+
+- name: join the node to cluster
+  shell: sh /tmp/join

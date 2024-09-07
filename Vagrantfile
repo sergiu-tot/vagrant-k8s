@@ -6,7 +6,7 @@ base = "ubuntu/jammy64"
 
 vms = [
   { :hostname => "m01", :ip => "192.168.56.10", :role => "master" },
-#   { :hostname => "w01", :ip => "192.168.56.20", :role => "worker" },
+  { :hostname => "w01", :ip => "192.168.56.20", :role => "worker" },
 #   { :hostname => "w02", :ip => "192.168.56.30", :role => "worker" },
 ]
 

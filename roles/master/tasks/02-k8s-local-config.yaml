@@ -10,9 +10,10 @@
 - name: copy kubernetes config for root user 
   ansible.builtin.copy:
     src: /etc/kubernetes/admin.conf
-    dest: "{{ item }}"
+    dest: "{{ item.path }}"
+    owner: "{{ item.owner }}"
     mode: 0400
     remote_src: true
   with_items:
-    - "/root/.kube/config"
-    - "/home/vagrant/.kube/config"
+    - { path: "/root/.kube/config", owner: "root" }
+    - { path: "/home/vagrant/.kube/config", owner: "vagrant" }
