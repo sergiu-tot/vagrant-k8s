@@ -56,3 +56,11 @@ Check the `./vars/main.yaml` file and customize if you need different versions, 
 ## Shared folder
 
 The local `shared-folder` is shared with all the cluster nodes, mounted in the `/mnt/shared-folder` path. You can use it to share files (e.g.) between your host and cluster nodes.
+
+## TODO
+
+- metallb
+- nginx-ingress
+- kyverno
+- other CNIs (flannel, cilium)
+- k8s dashboard

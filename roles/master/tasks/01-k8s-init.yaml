@@ -9,8 +9,3 @@
   ansible.builtin.command: kubeadm init --config /root/kubeadm-config.yaml
   args:
     creates: /etc/kubernetes/admin.conf
-
-- name: upload cluster certificates
-  ansible.builtin.shell: kubeadm init phase upload-certs --upload-certs --config /root/kubeadm-config.yaml && touch /root/.k8s_certs_uploaded
-  args:
-    creates: /root/.k8s_certs_uploaded
